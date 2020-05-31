@@ -35,11 +35,11 @@
                 :height="previewHeight"
             />
             <Picker
-                v-if="!suckerHide"
-                :picker-canvas="suckerCanvas"
-                :picker-area="suckerArea"
-                @openSucker="openSucker"
-                @selectSucker="selectSucker"
+                v-if="!pickerHide"
+                :picker-canvas="pickerCanvas"
+                :picker-area="pickerArea"
+                @openPicker="openPicker"
+                @selectPicker="selectPicker"
             />
         </div>
         <Box name="HEX" :color="modelHex" @inputColor="inputHex" />
@@ -82,15 +82,15 @@ export default {
             type: String,
             default: 'dark',
         },
-        suckerHide: {
+        pickerHide: {
             type: Boolean,
             default: true,
         },
-        suckerCanvas: {
+        pickerCanvas: {
             type: null, // HTMLCanvasElement
             default: null,
         },
-        suckerArea: {
+        pickerArea: {
             type: Array,
             default: () => [],
         },
@@ -144,7 +144,7 @@ export default {
             return this.hueHeight + (this.hueWidth + 8) * 2
         },
         previewWidth() {
-            return this.totalWidth - (this.suckerHide ? 0 : this.previewHeight)
+            return this.totalWidth - (this.pickerHide ? 0 : this.previewHeight)
         },
         rgba() {
             return {
@@ -232,10 +232,10 @@ export default {
             this.modelHex = this.hexString
             this.modelRgba = this.rgbaStringShort
         },
-        openSucker(isOpen) {
-            this.$emit('openSucker', isOpen)
+        openPicker(isOpen) {
+            this.$emit('openPicker', isOpen)
         },
-        selectSucker(color) {
+        selectPicker(color) {
             const { r, g, b, a, h, s, v } = this.setColorValue(color)
             Object.assign(this, { r, g, b, a, h, s, v })
             this.setText()

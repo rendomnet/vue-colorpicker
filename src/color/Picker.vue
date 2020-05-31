@@ -1,19 +1,19 @@
 <template>
     <div>
         <svg
-            v-if="!isSucking"
-            :class="{ active: isOpenSucker }"
+            v-if="!isPicking"
+            :class="{ active: isOpenPicker }"
             class="picker"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="-12 -12 48 48"
-            @click="openSucker"
+            @click="openPicker"
         >
             <path
                 d="M13.1,8.2l5.6,5.6c0.4,0.4,0.5,1.1,0.1,1.5s-1.1,0.5-1.5,0.1c0,0-0.1,0-0.1-0.1l-1.4-1.4l-7.7,7.7C7.9,21.9,7.6,22,7.3,22H3.1C2.5,22,2,21.5,2,20.9l0,0v-4.2c0-0.3,0.1-0.6,0.3-0.8l5.8-5.8C8.5,9.7,9.2,9.6,9.7,10s0.5,1.1,0.1,1.5c0,0,0,0.1-0.1,0.1l-5.5,5.5v2.7h2.7l7.4-7.4L8.7,6.8c-0.5-0.4-0.5-1-0.1-1.5s1.1-0.5,1.5-0.1c0,0,0.1,0,0.1,0.1l1.4,1.4l3.5-3.5c1.6-1.6,4.1-1.6,5.8-0.1c1.6,1.6,1.6,4.1,0.1,5.8L20.9,9l-3.6,3.6c-0.4,0.4-1.1,0.5-1.5,0.1"
             />
         </svg>
         <svg
-            v-if="isSucking"
+            v-if="isPicking"
             class="picker"
             viewBox="-16 -16 68 68"
             xmlns="http://www.w3.org/2000/svg"
@@ -39,38 +39,38 @@
 </template>
 
 <script>
-import imgSucker from '../img/picker.png'
+import imgPicker from '../img/picker.png'
 export default {
     props: {
-        suckerCanvas: {
+        pickerCanvas: {
             type: null, // HTMLCanvasElement
             default: null,
         },
-        suckerArea: {
+        pickerArea: {
             type: Array,
             default: () => [],
         },
     },
     data() {
         return {
-            isOpenSucker: false, // 是否处于吸管状态
-            suckerPreview: null, // 吸管旁边的预览颜色dom
-            isSucking: false, // 是否处于吸管等待状态
+            isOpenPicker: false, // 是否处于吸管状态
+            pickerPreview: null, // 吸管旁边的预览颜色dom
+            isPicking: false, // 是否处于吸管等待状态
         }
     },
     watch: {
-        suckerCanvas(newVal) {
-            this.isSucking = false
-            this.suckColor(newVal)
-            newVal.style.cursor = `url(${imgSucker}) 0 32, default`
+        pickerCanvas(newVal) {
+            this.isPicking = false
+            this.pickColor(newVal)
+            newVal.style.cursor = `url(${imgPicker}) 0 32, default`
         },
     },
     methods: {
-        openSucker() {
-            if (!this.isOpenSucker) {
-                this.isOpenSucker = true
-                this.isSucking = true
-                this.$emit('openSucker', true)
+        openPicker() {
+            if (!this.isOpenPicker) {
+                this.isOpenPicker = true
+                this.isPicking = true
+                this.$emit('openPicker', true)
                 document.addEventListener('keydown', this.keydownHandler)
             } else {
                 // 和按下esc键的处理逻辑一样
@@ -80,15 +80,15 @@ export default {
         keydownHandler(e) {
             // esc
             if (e.keyCode === 27) {
-                this.isOpenSucker = false
-                this.isSucking = false
-                this.$emit('openSucker', false)
+                this.isOpenPicker = false
+                this.isPicking = false
+                this.$emit('openPicker', false)
                 document.removeEventListener('keydown', this.keydownHandler)
                 document.removeEventListener('mousemove', this.mousemoveHandler)
                 document.removeEventListener('mouseup', this.mousemoveHandler)
-                if (this.suckerPreview) {
-                    document.body.removeChild(this.suckerPreview)
-                    this.suckerPreview = null
+                if (this.pickerPreview) {
+                    document.body.removeChild(this.pickerPreview)
+                    this.pickerPreview = null
                 }
             }
         },
@@ -99,10 +99,10 @@ export default {
                 left: domLeft,
                 width,
                 height,
-            } = this.suckerCanvas.getBoundingClientRect()
+            } = this.pickerCanvas.getBoundingClientRect()
             const x = clientX - domLeft
             const y = clientY - domTop
-            const ctx = this.suckerCanvas.getContext('2d')
+            const ctx = this.pickerCanvas.getContext('2d')
             const imgData = ctx.getImageData(
                 Math.min(x, width - 1),
                 Math.min(y, height - 1),
@@ -111,7 +111,7 @@ export default {
             )
             let [r, g, b, a] = imgData.data
             a = parseFloat((a / 255).toFixed(2))
-            const style = this.suckerPreview.style
+            const style = this.pickerPreview.style
             Object.assign(style, {
                 position: 'absolute',
                 left: clientX + 20 + 'px',
@@ -125,23 +125,23 @@ export default {
                 zIndex: 95, // 吸管的小圆圈预览色的层级不能超过颜色选择器
             })
             if (
-                clientX >= this.suckerArea[0] &&
-                clientY >= this.suckerArea[1] &&
-                clientX <= this.suckerArea[2] &&
-                clientY <= this.suckerArea[3]
+                clientX >= this.pickerArea[0] &&
+                clientY >= this.pickerArea[1] &&
+                clientX <= this.pickerArea[2] &&
+                clientY <= this.pickerArea[3]
             ) {
                 style.display = ''
             } else {
                 style.display = 'none'
             }
         },
-        suckColor(dom) {
+        pickColor(dom) {
             if (dom && dom.tagName !== 'CANVAS') {
                 return
             }
 
-            this.suckerPreview = document.createElement('div')
-            document.body.appendChild(this.suckerPreview)
+            this.pickerPreview = document.createElement('div')
+            document.body.appendChild(this.pickerPreview)
 
             document.addEventListener('mousemove', this.mousemoveHandler)
             document.addEventListener('mouseup', this.mousemoveHandler)
@@ -160,7 +160,7 @@ export default {
                 )
                 let [r, g, b, a] = imgData.data
                 a = parseFloat((a / 255).toFixed(2))
-                this.$emit('selectSucker', { r, g, b, a })
+                this.$emit('selectPicker', { r, g, b, a })
             })
         },
     },

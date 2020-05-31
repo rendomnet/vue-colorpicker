@@ -9,12 +9,12 @@
                     :theme="theme"
                     :color="color"
                     :picker-hide="false"
-                    :picker-canvas="suckerCanvas"
-                    :picker-area="suckerArea"
+                    :picker-canvas="pickerCanvas"
+                    :picker-area="pickerArea"
                     @changeColor="changeColor"
-                    @openSucker="openSucker"
+                    @openPicker="openPicker"
                 />
-                <img v-if="isOpenSucker" ref="cover" />
+                <img v-if="isOpenPicker" ref="cover" />
             </div>
         </div>
         <div class="github">
@@ -45,9 +45,9 @@ export default {
     data() {
         return {
             color: '#59c7f9',
-            suckerCanvas: null,
-            suckerArea: [],
-            isOpenSucker: false,
+            pickerCanvas: null,
+            pickerArea: [],
+            isOpenPicker: false,
             theme: '',
             inAnimation: false,
         }
@@ -57,21 +57,21 @@ export default {
             const { r, g, b, a } = color.rgba
             this.color = `rgba(${r}, ${g}, ${b}, ${a})`
         },
-        openSucker(isOpen) {
-            this.isOpenSucker = isOpen
+        openPicker(isOpen) {
+            this.isOpenPicker = isOpen
             if (isOpen) {
                 setTimeout(() => {
                     const cover = this.$refs.cover
                     cover.onload = () => {
                         // 如果已经点击取消了才加载完，则不执行
-                        if (!this.isOpenSucker) {
+                        if (!this.isOpenPicker) {
                             return
                         }
                         const coverRect = cover.getBoundingClientRect()
                         const canvas = this.createCanvas(cover, coverRect)
                         document.body.appendChild(canvas)
-                        this.suckerCanvas = canvas
-                        this.suckerArea = [
+                        this.pickerCanvas = canvas
+                        this.pickerArea = [
                             coverRect.left,
                             coverRect.top,
                             coverRect.left + coverRect.width,
@@ -82,7 +82,7 @@ export default {
                     cover.src = imgCover
                 }, 10)
             } else {
-                this.suckerCanvas && this.suckerCanvas.remove()
+                this.pickerCanvas && this.pickerCanvas.remove()
             }
         },
         createCanvas(cover, coverRect) {

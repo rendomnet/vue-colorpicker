@@ -20,10 +20,10 @@ $ yarn add @caohenghu/vue-colorpicker
             theme="light"
             :color="color"
             :picker-hide="false"
-            :picker-canvas="suckerCanvas"
-            :picker-area="suckerArea"
+            :picker-canvas="pickerCanvas"
+            :picker-area="pickerArea"
             @changeColor="changeColor"
-            @openSucker="openSucker"
+            @openPicker="openPicker"
         />
     </div>
 </template>
@@ -38,9 +38,9 @@ $ yarn add @caohenghu/vue-colorpicker
         data() {
             return {
                 color: '#59c7f9',
-                suckerCanvas: null,
-                suckerArea: [],
-                isSucking: false,
+                pickerCanvas: null,
+                pickerArea: [],
+                isPicking: false,
             }
         },
         methods: {
@@ -48,13 +48,13 @@ $ yarn add @caohenghu/vue-colorpicker
                 const { r, g, b, a } = color.rgba
                 this.color = `rgba(${r}, ${g}, ${b}, ${a})`
             },
-            openSucker(isOpen) {
+            openPicker(isOpen) {
                 if (isOpen) {
                     // ... canvas be created
-                    // this.suckerCanvas = canvas
-                    // this.suckerArea = [x1, y1, x2, y2]
+                    // this.pickerCanvas = canvas
+                    // this.pickerArea = [x1, y1, x2, y2]
                 } else {
-                    // this.suckerCanvas && this.suckerCanvas.remove
+                    // this.pickerCanvas && this.pickerCanvas.remove
                 }
             },
         },
@@ -81,6 +81,6 @@ $ yarn add @caohenghu/vue-colorpicker
 | Name        | Type     | Args   | Description                     |
 | ----------- | -------- | ------ | ------------------------------- |
 | changeColor | Function | color  | `{ rgba: {}, hsv: {}, hex: ''}` |
-| openSucker  | Function | isOpen | `true` or `false`               |
+| openPicker  | Function | isOpen | `true` or `false`               |
 
-> if you want use picker, then `openSucker`, `picker-hide`, `picker-canvas`, `picker-area` is necessary. when you click picker button, you can click it again or press key of `esc` to exit.
+> if you want use picker, then `openPicker`, `picker-hide`, `picker-canvas`, `picker-area` is necessary. when you click picker button, you can click it again or press key of `esc` to exit.
