@@ -19,9 +19,9 @@ $ yarn add @caohenghu/vue-colorpicker
         <color-picker
             theme="light"
             :color="color"
-            :sucker-hide="false"
-            :sucker-canvas="suckerCanvas"
-            :sucker-area="suckerArea"
+            :picker-hide="false"
+            :picker-canvas="suckerCanvas"
+            :picker-area="suckerArea"
             @changeColor="changeColor"
             @openSucker="openSucker"
         />
@@ -33,14 +33,14 @@ $ yarn add @caohenghu/vue-colorpicker
 
     export default {
         components: {
-            colorPicker
+            colorPicker,
         },
         data() {
             return {
                 color: '#59c7f9',
                 suckerCanvas: null,
                 suckerArea: [],
-                isSucking: false
+                isSucking: false,
             }
         },
         methods: {
@@ -56,8 +56,8 @@ $ yarn add @caohenghu/vue-colorpicker
                 } else {
                     // this.suckerCanvas && this.suckerCanvas.remove
                 }
-            }
-        }
+            },
+        },
     }
 </script>
 ```
@@ -70,9 +70,9 @@ $ yarn add @caohenghu/vue-colorpicker
 | color              | String            | `#000000`                                                                                                                                                                                | `rgba` or `hex`                         |
 | colors-default     | Array             | `['#000000', '#FFFFFF', '#FF1900', '#F47365', '#FFB243', '#FFE623', '#6EFF2A', '#1BC7B1', '#00BEFF', '#2E81FF', '#5D61FF', '#FF89CF', '#FC3CAD', '#BF3DCE', '#8E00A7', 'rgba(0,0,0,0)']` | like `['#ff00ff', '#0f0f0f', ...]`      |
 | colors-history-key | String            | `vue-colorpicker-history`                                                                                                                                                                |
-| sucker-hide        | Boolean           | `true`                                                                                                                                                                                   | `true` or `false`                       |
-| sucker-canvas      | HTMLCanvasElement | `null`                                                                                                                                                                                   | like `document.createElement('canvas')` |
-| sucker-area        | Array             | `[]`                                                                                                                                                                                     | like `[x1, y1, x2, y2]`                 |
+| picker-hide        | Boolean           | `true`                                                                                                                                                                                   | `true` or `false`                       |
+| picker-canvas      | HTMLCanvasElement | `null`                                                                                                                                                                                   | like `document.createElement('canvas')` |
+| picker-area        | Array             | `[]`                                                                                                                                                                                     | like `[x1, y1, x2, y2]`                 |
 
 > `color` is one-way data flow, so you can't use `v-model`. why? because you'll listen `changeColor` event do more things, so i think it's not necessary here.
 
@@ -83,4 +83,4 @@ $ yarn add @caohenghu/vue-colorpicker
 | changeColor | Function | color  | `{ rgba: {}, hsv: {}, hex: ''}` |
 | openSucker  | Function | isOpen | `true` or `false`               |
 
-> if you want use sucker, then `openSucker`, `sucker-hide`, `sucker-canvas`, `sucker-area` is necessary. when you click sucker button, you can click it again or press key of `esc` to exit.
+> if you want use picker, then `openSucker`, `picker-hide`, `picker-canvas`, `picker-area` is necessary. when you click picker button, you can click it again or press key of `esc` to exit.

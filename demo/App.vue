@@ -8,9 +8,9 @@
                 <color-picker
                     :theme="theme"
                     :color="color"
-                    :sucker-hide="false"
-                    :sucker-canvas="suckerCanvas"
-                    :sucker-area="suckerArea"
+                    :picker-hide="false"
+                    :picker-canvas="suckerCanvas"
+                    :picker-area="suckerArea"
                     @changeColor="changeColor"
                     @openSucker="openSucker"
                 />
@@ -40,7 +40,7 @@ import imgCover from './cover.jpg'
 
 export default {
     components: {
-        colorPicker
+        colorPicker,
     },
     data() {
         return {
@@ -49,7 +49,7 @@ export default {
             suckerArea: [],
             isOpenSucker: false,
             theme: '',
-            inAnimation: false
+            inAnimation: false,
         }
     },
     methods: {
@@ -75,7 +75,7 @@ export default {
                             coverRect.left,
                             coverRect.top,
                             coverRect.left + coverRect.width,
-                            coverRect.top + coverRect.height
+                            coverRect.top + coverRect.height,
                         ]
                     }
                     cover.setAttribute('crossorigin', 'Anonymous')
@@ -96,7 +96,7 @@ export default {
                 position: 'absolute',
                 left: coverRect.left + 'px',
                 top: coverRect.top + 'px',
-                opacity: 0
+                opacity: 0,
             })
             return canvas
         },
@@ -106,8 +106,8 @@ export default {
         },
         animationEnd() {
             this.inAnimation = false
-        }
-    }
+        },
+    },
 }
 </script>
 
